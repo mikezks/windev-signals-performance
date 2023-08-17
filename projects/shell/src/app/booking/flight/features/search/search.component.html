@@ -1,0 +1,99 @@
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title">Flight Search</h2>
+  </div>
+
+  <div class="card-body">
+    <form
+      #form="ngForm" *ngIf="true"
+      [cdVisualizer]="cd.count()" #cd="cdv" [viewTitle]="{
+        viewType: 'Embedded View *ngIf',
+        viewDetails: 'Flight Filter Form'
+      }">
+      <div >
+        <div class="form-group">
+          <label>From:</label>
+          <input [ngModel]="from()" (ngModelChange)="from.set($event)" name="from" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label>To:</label>
+          <input [ngModel]="to()" (ngModelChange)="to.set($event)" name="to" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label>Additional information:</label>
+          <input ngModel (ngModelChange)="additionalInfo.set($event)" name="add" class="form-control" />
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <button
+          (click)="bookingFeature.search(from(), to())"
+          class="btn btn-default">
+          Search
+        </button>
+        <button
+          (click)="changeLogMessage()"
+          class="btn btn-default">
+          Change Log Message
+        </button>
+      </div>
+    </form>
+
+    <div
+      *ngIf="true" class="form-group"
+      [cdVisualizer]="cd.count()" #cd="cdv" [viewTitle]="{
+        viewType: 'Embedded View *ngIf',
+        viewDetails: 'Flight Info'
+      }">
+      <p>
+        {{ flightInfo()[0] }}<br>
+        {{ flightInfo()[1] }}
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<div
+  class="row" *ngIf="true"
+  [cdVisualizer]="cd.count()" #cd="cdv" [viewTitle]="{
+    viewType: 'Embedded View *ngIf',
+    viewDetails: 'Flight Result'
+  }">
+  <div
+      *ngFor="let flight of bookingFeature.flights(); trackBy: flightTrackBy"
+      [cdVisualizer]="cd.count()" #cd="cdv" [viewTitle]="{
+        viewType: 'Embedded View *ngFor',
+        viewDetails: 'Flight Result Items'
+      }">
+
+      <app-flight-card
+        [item]="flight"
+        [selected]="basket()[flight.id]"
+        (selectedChange)="updateBasket(flight.id, $event)"
+      />
+
+    </div>
+</div>
+
+<div
+  *ngIf="true"
+  [cdVisualizer]="cd.count()" #cd="cdv" [viewTitle]="{
+    viewType: 'Embedded View *ngIf',
+    viewDetails: 'Flight Basket'
+  }">
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title">Basket</h2>
+    </div>
+
+    <div class="card-body">
+      <pre>{{ basket() | json }}</pre>
+    </div>
+  </div>
+</div>
+
+<app-counter />
+
+{{ count() }}
